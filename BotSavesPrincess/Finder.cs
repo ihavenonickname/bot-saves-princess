@@ -15,36 +15,36 @@ namespace BotSavesPrincess
             _lastColumn = lastColumn;
         }
 
-        public List<Position> findPath(Position start, Position target, HashSet<Position> nonWalkable)
+        public List<Position> findPath(Position start, Position target, HashSet<Position> nonReachable)
         {
-            var closedSet = new HashSet<Position>(nonWalkable);
+            var visitedPositions = new HashSet<Position>(nonReachable);
 
-            var openSet = new HashSet<Position>();
+            var availablePositions = new HashSet<Position>();
 
-            openSet.Add(start);
+            availablePositions.Add(start);
 
-            var cameFrom = new Dictionary<Position, Position>();
+            var previousPosition = new Dictionary<Position, Position>();
 
-            var gScore = new Dictionary<Position, double>();
+            var actualScore = new Dictionary<Position, double>();
 
-            gScore[start] = 0;
+            actualScore[start] = 0;
 
-            var fScore = new Dictionary<Position, double>();
+            var estimatedScore = new Dictionary<Position, double>();
 
-            fScore[start] = distance(start, target);
+            estimatedScore[start] = estimateDistance(start, target);
 
-            while (openSet.Any())
+            while (availablePositions.Any())
             {
                 Position current = null;
 
-                foreach (var pos in openSet.Intersect(fScore.Keys))
+                foreach (var pos in availablePositions.Intersect(estimatedScore.Keys))
                 {
                     if (current == null)
                     {
                         current = pos;
                     }
 
-                    if (fScore[pos] < fScore[current])
+                    if (estimatedScore[pos] < estimatedScore[current])
                     {
                         current = pos;
                     }
@@ -56,7 +56,7 @@ namespace BotSavesPrincess
 
                     while (true)
                     {
-                        current = cameFrom[current];
+                        current = previousPosition[current];
 
                         if (current == start)
                         {
@@ -67,36 +67,36 @@ namespace BotSavesPrincess
                     }
                 }
 
-                openSet.Remove(current);
+                availablePositions.Remove(current);
 
-                closedSet.Add(current);
+                visitedPositions.Add(current);
 
                 foreach (var neighbor in neighborhood(current))
                 {
-                    if (closedSet.Contains(neighbor))
+                    if (visitedPositions.Contains(neighbor))
                     {
                         continue;
                     }
 
-                    openSet.Add(neighbor);
+                    availablePositions.Add(neighbor);
 
-                    if (!gScore.ContainsKey(current))
+                    if (!actualScore.ContainsKey(current))
                     {
-                        gScore[current] = 999999;
+                        actualScore[current] = 999999;
                     }
 
-                    var tentativeScore = gScore[current] + distance(current, neighbor);
+                    var attemptScore = actualScore[current] + estimateDistance(current, neighbor);
 
-                    if (!gScore.ContainsKey(neighbor))
+                    if (!actualScore.ContainsKey(neighbor))
                     {
-                        gScore[neighbor] = 999999;
+                        actualScore[neighbor] = 999999;
                     }
 
-                    if (tentativeScore < gScore[neighbor])
+                    if (attemptScore < actualScore[neighbor])
                     {
-                        cameFrom[neighbor] = current;
-                        gScore[neighbor] = tentativeScore;
-                        fScore[neighbor] = gScore[neighbor] + distance(neighbor, target);
+                        previousPosition[neighbor] = current;
+                        actualScore[neighbor] = attemptScore;
+                        estimatedScore[neighbor] = actualScore[neighbor] + estimateDistance(neighbor, target);
                     }
                 }
             }
@@ -104,34 +104,30 @@ namespace BotSavesPrincess
             return null;
         }
 
-        private List<Position> neighborhood(Position pos)
+        private IEnumerable<Position> neighborhood(Position pos)
         {
-            var neighbors = new List<Position>();
-
             if (pos.Row > 0)
             {
-                neighbors.Add(new Position(pos.Row - 1, pos.Column));
+                yield return new Position(pos.Row - 1, pos.Column);
             }
 
             if (pos.Row < _lastRow)
             {
-                neighbors.Add(new Position(pos.Row + 1, pos.Column));
+                yield return new Position(pos.Row + 1, pos.Column);
             }
 
             if (pos.Column > 0)
             {
-                neighbors.Add(new Position(pos.Row, pos.Column - 1));
+                yield return new Position(pos.Row, pos.Column - 1);
             }
 
             if (pos.Column < _lastColumn)
             {
-                neighbors.Add(new Position(pos.Row, pos.Column + 1));
+                yield return new Position(pos.Row, pos.Column + 1);
             }
-
-            return neighbors;
         }
 
-        private double distance(Position pos, Position target)
+        private double estimateDistance(Position pos, Position target)
         {
             var difRow = target.Row - pos.Row;
             var difCol = target.Column - pos.Column;

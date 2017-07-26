@@ -14,8 +14,8 @@ namespace BotSavesPrincess
             _lastRow = lastRow;
             _lastColumn = lastColumn;
         }
-
-        public List<Position> findPath(Position start, Position target, HashSet<Position> nonReachable)
+        
+        public IEnumerable<Position> FindPath(Position start, Position target, HashSet<Position> nonReachable)
         {
             var visitedPositions = new HashSet<Position>(nonReachable);
 
@@ -31,7 +31,7 @@ namespace BotSavesPrincess
 
             var estimatedScore = new Dictionary<Position, double>();
 
-            estimatedScore[start] = estimateDistance(start, target);
+            estimatedScore[start] = EstimateDistance(start, target);
 
             while (availablePositions.Any())
             {
@@ -71,7 +71,7 @@ namespace BotSavesPrincess
 
                 visitedPositions.Add(current);
 
-                foreach (var neighbor in neighborhood(current))
+                foreach (var neighbor in Neighborhood(current))
                 {
                     if (visitedPositions.Contains(neighbor))
                     {
@@ -85,7 +85,7 @@ namespace BotSavesPrincess
                         actualScore[current] = 999999;
                     }
 
-                    var attemptScore = actualScore[current] + estimateDistance(current, neighbor);
+                    var attemptScore = actualScore[current] + EstimateDistance(current, neighbor);
 
                     if (!actualScore.ContainsKey(neighbor))
                     {
@@ -96,15 +96,15 @@ namespace BotSavesPrincess
                     {
                         previousPosition[neighbor] = current;
                         actualScore[neighbor] = attemptScore;
-                        estimatedScore[neighbor] = actualScore[neighbor] + estimateDistance(neighbor, target);
+                        estimatedScore[neighbor] = actualScore[neighbor] + EstimateDistance(neighbor, target);
                     }
                 }
             }
 
             return null;
         }
-
-        private IEnumerable<Position> neighborhood(Position pos)
+        
+        private IEnumerable<Position> Neighborhood(Position pos)
         {
             if (pos.Row > 0)
             {
@@ -127,7 +127,7 @@ namespace BotSavesPrincess
             }
         }
 
-        private double estimateDistance(Position pos, Position target)
+        private double EstimateDistance(Position pos, Position target)
         {
             var difRow = target.Row - pos.Row;
             var difCol = target.Column - pos.Column;

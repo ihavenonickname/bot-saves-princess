@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace BotSavesPrincess
@@ -9,8 +10,8 @@ namespace BotSavesPrincess
     public partial class Form1 : Form
     {
         private const int CELL_SIZE = 15;
-        private const int ROWS_COUNT = 45;
-        private const int COLS_COUNT = 70;
+        private const int ROWS_COUNT = 40;
+        private const int COLS_COUNT = 60;
 
         private readonly Color cleanColor = Color.FromKnownColor(KnownColor.Control);
         private readonly Color heroColor = Color.Blue;
@@ -24,6 +25,14 @@ namespace BotSavesPrincess
         public Form1()
         {
             InitializeComponent();
+
+            typeof(DataGridView).InvokeMember(
+               "DoubleBuffered",
+               BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty,
+               null,
+               dgvBoard,
+               new object[] { true }
+            );
 
             for (var i = 0; i < COLS_COUNT; i++)
             {
@@ -46,8 +55,25 @@ namespace BotSavesPrincess
             Height = dgvBoard.Height + 120;
 
             dgvBoard.CellClick += dgvBoard_CellClick;
+            
+            dgvBoard.CellMouseEnter += dgvBoard_CellMouseEnter;
 
             wrkFinder.RunWorkerCompleted += wrkFinder_RunWorkerCompleted;
+        }
+
+        private void dgvBoard_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (ModifierKeys.HasFlag(Keys.Control))
+            {
+                if (radWall.Checked)
+                {
+                    changeColor(e.RowIndex, e.ColumnIndex, wallColor);
+                }
+                else if (radClean.Checked)
+                {
+                    changeColor(e.RowIndex, e.ColumnIndex, cleanColor);
+                }
+            }
         }
 
         private void wrkFinder_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -136,7 +162,7 @@ namespace BotSavesPrincess
 
             var finder = new Finder(ROWS_COUNT - 1, COLS_COUNT - 1);
 
-            var path = finder.findPath(_heroPosition, _princessPosition, walls);
+            var path = finder.FindPath(_heroPosition, _princessPosition, walls);
 
             e.Result = path;
         }

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgvBoard = new System.Windows.Forms.DataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radClean = new System.Windows.Forms.RadioButton();
@@ -52,14 +52,14 @@
             this.dgvBoard.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             this.dgvBoard.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvBoard.ColumnHeadersVisible = false;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvBoard.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvBoard.DefaultCellStyle = dataGridViewCellStyle1;
             this.dgvBoard.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgvBoard.EnableHeadersVisualStyles = false;
             this.dgvBoard.Location = new System.Drawing.Point(15, 65);
@@ -87,7 +87,7 @@
             // radClean
             // 
             this.radClean.AutoSize = true;
-            this.radClean.Location = new System.Drawing.Point(183, 19);
+            this.radClean.Location = new System.Drawing.Point(185, 19);
             this.radClean.Name = "radClean";
             this.radClean.Size = new System.Drawing.Size(52, 17);
             this.radClean.TabIndex = 3;
@@ -99,7 +99,7 @@
             // 
             this.radWall.AutoSize = true;
             this.radWall.Checked = true;
-            this.radWall.Location = new System.Drawing.Point(131, 19);
+            this.radWall.Location = new System.Drawing.Point(133, 19);
             this.radWall.Name = "radWall";
             this.radWall.Size = new System.Drawing.Size(46, 17);
             this.radWall.TabIndex = 2;
@@ -110,7 +110,7 @@
             // radPrincess
             // 
             this.radPrincess.AutoSize = true;
-            this.radPrincess.Location = new System.Drawing.Point(60, 19);
+            this.radPrincess.Location = new System.Drawing.Point(62, 19);
             this.radPrincess.Name = "radPrincess";
             this.radPrincess.Size = new System.Drawing.Size(65, 17);
             this.radPrincess.TabIndex = 1;
@@ -120,7 +120,7 @@
             // radHero
             // 
             this.radHero.AutoSize = true;
-            this.radHero.Location = new System.Drawing.Point(6, 19);
+            this.radHero.Location = new System.Drawing.Point(8, 19);
             this.radHero.Name = "radHero";
             this.radHero.Size = new System.Drawing.Size(48, 17);
             this.radHero.TabIndex = 0;

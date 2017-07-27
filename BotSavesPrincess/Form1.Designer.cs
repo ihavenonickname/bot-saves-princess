@@ -39,8 +39,7 @@
             this.wrkFinder = new System.ComponentModel.BackgroundWorker();
             this.btnClearAll = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.radShortestPath = new System.Windows.Forms.RadioButton();
-            this.radRandomPath = new System.Windows.Forms.RadioButton();
+            this.cboFinder = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBoard)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -71,7 +70,7 @@
             this.dgvBoard.Name = "dgvBoard";
             this.dgvBoard.ReadOnly = true;
             this.dgvBoard.RowHeadersVisible = false;
-            this.dgvBoard.Size = new System.Drawing.Size(543, 394);
+            this.dgvBoard.Size = new System.Drawing.Size(620, 394);
             this.dgvBoard.TabIndex = 5;
             // 
             // groupBox1
@@ -81,7 +80,7 @@
             this.groupBox1.Controls.Add(this.radWall);
             this.groupBox1.Controls.Add(this.radPrincess);
             this.groupBox1.Controls.Add(this.radHero);
-            this.groupBox1.Location = new System.Drawing.Point(7, 12);
+            this.groupBox1.Location = new System.Drawing.Point(47, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(243, 47);
             this.groupBox1.TabIndex = 6;
@@ -135,7 +134,7 @@
             // 
             this.btnFind.Location = new System.Drawing.Point(144, 16);
             this.btnFind.Name = "btnFind";
-            this.btnFind.Size = new System.Drawing.Size(70, 23);
+            this.btnFind.Size = new System.Drawing.Size(78, 23);
             this.btnFind.TabIndex = 7;
             this.btnFind.Text = "Find";
             this.btnFind.UseVisualStyleBackColor = true;
@@ -148,7 +147,7 @@
             // btnClearAll
             // 
             this.btnClearAll.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnClearAll.Location = new System.Drawing.Point(490, 28);
+            this.btnClearAll.Location = new System.Drawing.Point(530, 28);
             this.btnClearAll.Name = "btnClearAll";
             this.btnClearAll.Size = new System.Drawing.Size(75, 23);
             this.btnClearAll.TabIndex = 8;
@@ -159,43 +158,29 @@
             // groupBox2
             // 
             this.groupBox2.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.groupBox2.Controls.Add(this.radRandomPath);
-            this.groupBox2.Controls.Add(this.radShortestPath);
+            this.groupBox2.Controls.Add(this.cboFinder);
             this.groupBox2.Controls.Add(this.btnFind);
-            this.groupBox2.Location = new System.Drawing.Point(256, 13);
+            this.groupBox2.Location = new System.Drawing.Point(296, 13);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(228, 46);
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Path";
             // 
-            // radShortestPath
+            // cboFinder
             // 
-            this.radShortestPath.AutoSize = true;
-            this.radShortestPath.Checked = true;
-            this.radShortestPath.Location = new System.Drawing.Point(6, 19);
-            this.radShortestPath.Name = "radShortestPath";
-            this.radShortestPath.Size = new System.Drawing.Size(64, 17);
-            this.radShortestPath.TabIndex = 8;
-            this.radShortestPath.TabStop = true;
-            this.radShortestPath.Text = "Shortest";
-            this.radShortestPath.UseVisualStyleBackColor = true;
-            // 
-            // radRandomPath
-            // 
-            this.radRandomPath.AutoSize = true;
-            this.radRandomPath.Location = new System.Drawing.Point(76, 19);
-            this.radRandomPath.Name = "radRandomPath";
-            this.radRandomPath.Size = new System.Drawing.Size(65, 17);
-            this.radRandomPath.TabIndex = 9;
-            this.radRandomPath.Text = "Random";
-            this.radRandomPath.UseVisualStyleBackColor = true;
+            this.cboFinder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboFinder.FormattingEnabled = true;
+            this.cboFinder.Location = new System.Drawing.Point(6, 17);
+            this.cboFinder.Name = "cboFinder";
+            this.cboFinder.Size = new System.Drawing.Size(132, 21);
+            this.cboFinder.TabIndex = 10;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(570, 471);
+            this.ClientSize = new System.Drawing.Size(650, 471);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.btnClearAll);
             this.Controls.Add(this.groupBox1);
@@ -209,7 +194,6 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -225,8 +209,7 @@
         private System.ComponentModel.BackgroundWorker wrkFinder;
         private System.Windows.Forms.Button btnClearAll;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.RadioButton radRandomPath;
-        private System.Windows.Forms.RadioButton radShortestPath;
+        private System.Windows.Forms.ComboBox cboFinder;
     }
 }
 

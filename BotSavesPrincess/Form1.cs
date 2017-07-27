@@ -11,7 +11,7 @@ namespace BotSavesPrincess
     {
         private const int CELL_SIZE = 20;
         private const int ROWS_COUNT = 30;
-        private const int COLS_COUNT = 60;
+        private const int COLS_COUNT = 70;
 
         private readonly Color cleanColor = Color.FromKnownColor(KnownColor.Control);
         private readonly Color heroColor = Color.Blue;
@@ -25,7 +25,7 @@ namespace BotSavesPrincess
         public Form1()
         {
             InitializeComponent();
-
+            
             typeof(DataGridView).InvokeMember(
                "DoubleBuffered",
                BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty,
@@ -59,6 +59,14 @@ namespace BotSavesPrincess
             dgvBoard.CellMouseEnter += dgvBoard_CellMouseEnter;
 
             wrkFinder.RunWorkerCompleted += wrkFinder_RunWorkerCompleted;
+
+            var neighborGenerator = new UDLRNeighborGenerator(ROWS_COUNT - 1, COLS_COUNT - 1);
+
+            cboFinder.Items.Add(new ShortestPathFinder(neighborGenerator));
+            cboFinder.Items.Add(new SemiRandomPathFinder(neighborGenerator));
+            cboFinder.Items.Add(new RandomPathFinder(neighborGenerator));
+
+            cboFinder.SelectedIndex = 0;
         }
         
         private void wrkFinder_DoWork(object sender, DoWorkEventArgs e)
@@ -76,16 +84,9 @@ namespace BotSavesPrincess
                 }
             }
 
-            var finder = new Finder(ROWS_COUNT - 1, COLS_COUNT - 1);
+            var finder = (IFinder)e.Argument;
 
-            if (radShortestPath.Checked)
-            {
-                e.Result = finder.FindShortestPath(_heroPosition, _princessPosition, walls);
-            }
-            else
-            {
-                e.Result = finder.FindRandomPath(_heroPosition, _princessPosition, walls);
-            }
+           e.Result = finder.FindPath(_heroPosition, _princessPosition, walls);
         }
 
         private void wrkFinder_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -97,6 +98,10 @@ namespace BotSavesPrincess
                 foreach (var pos in path)
                 {
                     changeColor(pos.Row, pos.Column, pathColor);
+
+                    //Application.DoEvents();
+
+                    //System.Threading.Thread.Sleep(0);
                 }
             }
             else
@@ -193,7 +198,7 @@ namespace BotSavesPrincess
                 }
             }
 
-            wrkFinder.RunWorkerAsync();
+            wrkFinder.RunWorkerAsync(cboFinder.SelectedItem);
         }
 
         private void btnClearAll_Click(object sender, EventArgs e)

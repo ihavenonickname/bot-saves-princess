@@ -9,8 +9,8 @@ namespace BotSavesPrincess
 {
     public partial class Form1 : Form
     {
-        private const int CELL_SIZE = 15;
-        private const int ROWS_COUNT = 40;
+        private const int CELL_SIZE = 20;
+        private const int ROWS_COUNT = 30;
         private const int COLS_COUNT = 60;
 
         private readonly Color cleanColor = Color.FromKnownColor(KnownColor.Control);
@@ -60,19 +60,31 @@ namespace BotSavesPrincess
 
             wrkFinder.RunWorkerCompleted += wrkFinder_RunWorkerCompleted;
         }
-
-        private void dgvBoard_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        
+        private void wrkFinder_DoWork(object sender, DoWorkEventArgs e)
         {
-            if (ModifierKeys.HasFlag(Keys.Control))
+            var walls = new HashSet<Position>();
+
+            for (var row = 0; row < ROWS_COUNT; row++)
             {
-                if (radWall.Checked)
+                for (var column = 0; column < COLS_COUNT; column++)
                 {
-                    changeColor(e.RowIndex, e.ColumnIndex, wallColor);
+                    if (dgvBoard.Rows[row].Cells[column].Style.BackColor == wallColor)
+                    {
+                        walls.Add(new Position(row, column));
+                    }
                 }
-                else if (radClean.Checked)
-                {
-                    changeColor(e.RowIndex, e.ColumnIndex, cleanColor);
-                }
+            }
+
+            var finder = new Finder(ROWS_COUNT - 1, COLS_COUNT - 1);
+
+            if (radShortestPath.Checked)
+            {
+                e.Result = finder.FindShortestPath(_heroPosition, _princessPosition, walls);
+            }
+            else
+            {
+                e.Result = finder.FindRandomPath(_heroPosition, _princessPosition, walls);
             }
         }
 
@@ -90,6 +102,21 @@ namespace BotSavesPrincess
             else
             {
                 MessageBox.Show("No path found");
+            }
+        }
+
+        private void dgvBoard_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (ModifierKeys.HasFlag(Keys.Control))
+            {
+                if (radWall.Checked)
+                {
+                    changeColor(e.RowIndex, e.ColumnIndex, wallColor);
+                }
+                else if (radClean.Checked)
+                {
+                    changeColor(e.RowIndex, e.ColumnIndex, cleanColor);
+                }
             }
         }
 
@@ -138,35 +165,7 @@ namespace BotSavesPrincess
                 _princessPosition = pos;
             }
         }
-
-        private void changeColor(int row, int col, Color color)
-        {
-            dgvBoard.Rows[row].Cells[col].Style.BackColor = color;
-            dgvBoard.Rows[row].Cells[col].Style.SelectionBackColor = color;
-        }
-
-        private void wrkFinder_DoWork(object sender, DoWorkEventArgs e)
-        {
-            var walls = new HashSet<Position>();
-
-            for (var row = 0; row < ROWS_COUNT; row++)
-            {
-                for (var column = 0; column < COLS_COUNT; column++)
-                {
-                    if (dgvBoard.Rows[row].Cells[column].Style.BackColor == wallColor)
-                    {
-                        walls.Add(new Position(row, column));
-                    }
-                }
-            }
-
-            var finder = new Finder(ROWS_COUNT - 1, COLS_COUNT - 1);
-
-            var path = finder.FindPath(_heroPosition, _princessPosition, walls);
-
-            e.Result = path;
-        }
-
+        
         private void btnFind_Click(object sender, EventArgs e)
         {
             if (_heroPosition == null)
@@ -209,6 +208,12 @@ namespace BotSavesPrincess
 
             _heroPosition = null;
             _princessPosition = null;
+        }
+
+        private void changeColor(int row, int col, Color color)
+        {
+            dgvBoard.Rows[row].Cells[col].Style.BackColor = color;
+            dgvBoard.Rows[row].Cells[col].Style.SelectionBackColor = color;
         }
     }
 }

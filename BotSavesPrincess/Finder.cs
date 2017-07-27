@@ -15,7 +15,7 @@ namespace BotSavesPrincess
             _lastColumn = lastColumn;
         }
         
-        public IEnumerable<Position> FindPath(Position start, Position target, HashSet<Position> nonReachable)
+        public IEnumerable<Position> FindShortestPath(Position start, Position target, HashSet<Position> nonReachable)
         {
             var visitedPositions = new HashSet<Position>(nonReachable);
 
@@ -52,19 +52,7 @@ namespace BotSavesPrincess
 
                 if (current == target)
                 {
-                    var path = new List<Position>();
-
-                    while (true)
-                    {
-                        current = previousPosition[current];
-
-                        if (current == start)
-                        {
-                            return path;
-                        }
-
-                        path.Add(current);
-                    }
+                    return BuildPath(previousPosition, start, current);
                 }
 
                 availablePositions.Remove(current);
@@ -103,6 +91,44 @@ namespace BotSavesPrincess
 
             return null;
         }
+
+        public IEnumerable<Position> FindRandomPath(Position start, Position target, HashSet<Position> nonReachable)
+        {
+            var random = new Random();
+
+            var availablePositions = new List<Position>();
+            var visitedPositions = new HashSet<Position>(nonReachable);
+            var previousPosition = new Dictionary<Position, Position>();
+
+            availablePositions.Add(start);
+
+            while (availablePositions.Any())
+            {
+                var index = random.Next(availablePositions.Count);
+
+                var current = availablePositions[index];
+
+                availablePositions.RemoveAt(index);
+                
+                if (current == target)
+                {
+                    return BuildPath(previousPosition, start, current);
+                }
+
+                visitedPositions.Add(current);
+
+                foreach (var neighbor in Neighborhood(current))
+                {
+                    if (!visitedPositions.Contains(neighbor))
+                    {
+                        availablePositions.Add(neighbor);
+                        previousPosition[neighbor] = current;
+                    }
+                }
+            }
+
+            return null;
+        }
         
         private IEnumerable<Position> Neighborhood(Position pos)
         {
@@ -124,6 +150,23 @@ namespace BotSavesPrincess
             if (pos.Column < _lastColumn)
             {
                 yield return new Position(pos.Row, pos.Column + 1);
+            }
+        }
+
+        private IEnumerable<Position> BuildPath(Dictionary<Position, Position> previousPosition, Position start, Position target)
+        {
+            var current = target;
+
+            while (true)
+            {
+                current = previousPosition[current];
+
+                if (current == start)
+                {
+                    break;
+                }
+
+                yield return current;
             }
         }
 

@@ -38,8 +38,12 @@
             this.btnFind = new System.Windows.Forms.Button();
             this.wrkFinder = new System.ComponentModel.BackgroundWorker();
             this.btnClearAll = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.radShortestPath = new System.Windows.Forms.RadioButton();
+            this.radRandomPath = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBoard)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // dgvBoard
@@ -67,7 +71,7 @@
             this.dgvBoard.Name = "dgvBoard";
             this.dgvBoard.ReadOnly = true;
             this.dgvBoard.RowHeadersVisible = false;
-            this.dgvBoard.Size = new System.Drawing.Size(493, 394);
+            this.dgvBoard.Size = new System.Drawing.Size(543, 394);
             this.dgvBoard.TabIndex = 5;
             // 
             // groupBox1
@@ -77,7 +81,7 @@
             this.groupBox1.Controls.Add(this.radWall);
             this.groupBox1.Controls.Add(this.radPrincess);
             this.groupBox1.Controls.Add(this.radHero);
-            this.groupBox1.Location = new System.Drawing.Point(61, 11);
+            this.groupBox1.Location = new System.Drawing.Point(7, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(243, 47);
             this.groupBox1.TabIndex = 6;
@@ -129,8 +133,7 @@
             // 
             // btnFind
             // 
-            this.btnFind.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnFind.Location = new System.Drawing.Point(310, 24);
+            this.btnFind.Location = new System.Drawing.Point(144, 16);
             this.btnFind.Name = "btnFind";
             this.btnFind.Size = new System.Drawing.Size(70, 23);
             this.btnFind.TabIndex = 7;
@@ -145,7 +148,7 @@
             // btnClearAll
             // 
             this.btnClearAll.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnClearAll.Location = new System.Drawing.Point(386, 24);
+            this.btnClearAll.Location = new System.Drawing.Point(490, 28);
             this.btnClearAll.Name = "btnClearAll";
             this.btnClearAll.Size = new System.Drawing.Size(75, 23);
             this.btnClearAll.TabIndex = 8;
@@ -153,13 +156,48 @@
             this.btnClearAll.UseVisualStyleBackColor = true;
             this.btnClearAll.Click += new System.EventHandler(this.btnClearAll_Click);
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.groupBox2.Controls.Add(this.radRandomPath);
+            this.groupBox2.Controls.Add(this.radShortestPath);
+            this.groupBox2.Controls.Add(this.btnFind);
+            this.groupBox2.Location = new System.Drawing.Point(256, 13);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(228, 46);
+            this.groupBox2.TabIndex = 9;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Path";
+            // 
+            // radShortestPath
+            // 
+            this.radShortestPath.AutoSize = true;
+            this.radShortestPath.Checked = true;
+            this.radShortestPath.Location = new System.Drawing.Point(6, 19);
+            this.radShortestPath.Name = "radShortestPath";
+            this.radShortestPath.Size = new System.Drawing.Size(64, 17);
+            this.radShortestPath.TabIndex = 8;
+            this.radShortestPath.TabStop = true;
+            this.radShortestPath.Text = "Shortest";
+            this.radShortestPath.UseVisualStyleBackColor = true;
+            // 
+            // radRandomPath
+            // 
+            this.radRandomPath.AutoSize = true;
+            this.radRandomPath.Location = new System.Drawing.Point(76, 19);
+            this.radRandomPath.Name = "radRandomPath";
+            this.radRandomPath.Size = new System.Drawing.Size(65, 17);
+            this.radRandomPath.TabIndex = 9;
+            this.radRandomPath.Text = "Random";
+            this.radRandomPath.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(520, 471);
+            this.ClientSize = new System.Drawing.Size(570, 471);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.btnClearAll);
-            this.Controls.Add(this.btnFind);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dgvBoard);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
@@ -170,6 +208,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvBoard)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -184,6 +224,9 @@
         private System.Windows.Forms.RadioButton radClean;
         private System.ComponentModel.BackgroundWorker wrkFinder;
         private System.Windows.Forms.Button btnClearAll;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.RadioButton radRandomPath;
+        private System.Windows.Forms.RadioButton radShortestPath;
     }
 }
 

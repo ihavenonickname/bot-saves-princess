@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace BotSavesPrincess
+namespace BotSavesPrincess_Core
 {
-    class PathHistory
+    public class Path
     {
         private readonly Dictionary<Position, Position> _memory = new Dictionary<Position, Position>();
 
@@ -17,6 +13,8 @@ namespace BotSavesPrincess
 
         public IEnumerable<Position> Build(Position start, Position target)
         {
+            var positions = new Stack<Position>();
+
             var current = target;
 
             while (true)
@@ -25,10 +23,10 @@ namespace BotSavesPrincess
 
                 if (current == start)
                 {
-                    break;
+                    return positions;
                 }
 
-                yield return current;
+                positions.Push(current);
             }
         }
     }

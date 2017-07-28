@@ -2,23 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BotSavesPrincess
+namespace BotSavesPrincess_Core
 {
-    class RandomPathFinder : IFinder
+    public class RandomPathFinder : IPathFinder
     {
-        private readonly INeighborGenerator _neighborGenerator;
-
-        public RandomPathFinder(INeighborGenerator neighborGenerator)
-        {
-            _neighborGenerator = neighborGenerator;
-        }
-
-        public IEnumerable<Position> FindPath(Position start, Position target)
-        {
-            return FindPath(start, target, new HashSet<Position>());
-        }
-
-        public IEnumerable<Position> FindPath(Position start, Position target, HashSet<Position> nonReachable)
+        public IEnumerable<Position> FindPath(Position start, Position target, HashSet<Position> nonReachable, INeighborhood neighborGenerator)
         {
             var random = new Random();
 
@@ -32,7 +20,7 @@ namespace BotSavesPrincess
 
             while (true)
             {
-                var neighbors = _neighborGenerator.Neighborhood(current);
+                var neighbors = neighborGenerator.Neighbors(current);
 
                 var nonVisitedneighbors = neighbors.Where(x => !visitedPositions.Contains(x)).ToArray();
 

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BotSavesPrincess.Properties
+namespace BotSavesPrincess_Core.Properties
 {
 
 

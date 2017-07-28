@@ -1,13 +1,14 @@
-﻿using System;
+﻿using BotSavesPrincess_Core;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace BotSavesPrincess
+namespace BotSavesPrincess_GUI
 {
-    public partial class Form1 : Form
+    public partial class frmBoard : Form
     {
         private const int CELL_SIZE = 20;
         private const int ROWS_COUNT = 30;
@@ -22,10 +23,13 @@ namespace BotSavesPrincess
         private Position _heroPosition = null;
         private Position _princessPosition = null;
 
-        public Form1()
+        public frmBoard()
         {
             InitializeComponent();
-            
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
             typeof(DataGridView).InvokeMember(
                "DoubleBuffered",
                BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.SetProperty,
@@ -47,28 +51,44 @@ namespace BotSavesPrincess
 
                 dgvBoard.Rows[index].Height = CELL_SIZE;
             }
-            
+
             dgvBoard.Width = CELL_SIZE * COLS_COUNT + 3;
             dgvBoard.Height = CELL_SIZE * ROWS_COUNT + 3;
 
             Width = dgvBoard.Width + 50;
             Height = dgvBoard.Height + 120;
 
+            CenterToScreen();
+
+            cboNeighborhood.Items.Add(new UDLRNeighborhood(ROWS_COUNT - 1, COLS_COUNT - 1));
+            cboNeighborhood.Items.Add(new DiagonalNeighborhood(ROWS_COUNT - 1, COLS_COUNT - 1));
+            cboNeighborhood.Items.Add(new OctagonalNeighborhood(ROWS_COUNT - 1, COLS_COUNT - 1));
+
+            cboNeighborhood.SelectedIndex = 0;
+
+            cboFinder.Items.Add(new ShortestPathFinder());
+            cboFinder.Items.Add(new SemiRandomPathFinder());
+            cboFinder.Items.Add(new RandomPathFinder());
+
+            cboFinder.SelectedIndex = 0;
+
             dgvBoard.CellClick += dgvBoard_CellClick;
-            
+
             dgvBoard.CellMouseEnter += dgvBoard_CellMouseEnter;
 
             wrkFinder.RunWorkerCompleted += wrkFinder_RunWorkerCompleted;
 
-            var neighborGenerator = new UDLRNeighborGenerator(ROWS_COUNT - 1, COLS_COUNT - 1);
+            wrkPath.ProgressChanged += wrkPath_ProgressChanged;
 
-            cboFinder.Items.Add(new ShortestPathFinder(neighborGenerator));
-            cboFinder.Items.Add(new SemiRandomPathFinder(neighborGenerator));
-            cboFinder.Items.Add(new RandomPathFinder(neighborGenerator));
-
-            cboFinder.SelectedIndex = 0;
+            FormClosing += form1_FormClosing;
         }
-        
+
+        private void form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            wrkFinder.CancelAsync();
+            wrkPath.CancelAsync();
+        }
+
         private void wrkFinder_DoWork(object sender, DoWorkEventArgs e)
         {
             var walls = new HashSet<Position>();
@@ -84,29 +104,54 @@ namespace BotSavesPrincess
                 }
             }
 
-            var finder = (IFinder)e.Argument;
+            var arguments = e.Argument as object[];
 
-           e.Result = finder.FindPath(_heroPosition, _princessPosition, walls);
+            var finder = arguments[0] as IPathFinder;
+            var neighborGenerator = arguments[1] as INeighborhood;
+
+           e.Result = finder.FindPath(_heroPosition, _princessPosition, walls, neighborGenerator);
         }
 
         private void wrkFinder_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            var path = (IEnumerable<Position>)e.Result;
-
-            if (path != null)
+            if (e.Result != null)
             {
-                foreach (var pos in path)
-                {
-                    changeColor(pos.Row, pos.Column, pathColor);
-
-                    //Application.DoEvents();
-
-                    //System.Threading.Thread.Sleep(0);
-                }
+                wrkPath.RunWorkerAsync(e.Result);
             }
             else
             {
                 MessageBox.Show("No path found");
+            }
+        }
+
+        private void wrkPath_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var path = e.Argument as IEnumerable<Position>;
+
+            foreach (var pos in path)
+            {
+                if (wrkPath.CancellationPending)
+                {
+                    return;
+                }
+
+                wrkPath.ReportProgress(0, pos);
+
+                System.Threading.Thread.Sleep(70);
+            }
+        }
+
+        private void wrkPath_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            try
+            {
+                var pos = e.UserState as Position;
+
+                changeColor(pos.Row, pos.Column, pathColor);
+            }
+            catch (Exception)
+            {
+                // Winforms gets mad if updating UI while closing the form...
             }
         }
 
@@ -198,7 +243,9 @@ namespace BotSavesPrincess
                 }
             }
 
-            wrkFinder.RunWorkerAsync(cboFinder.SelectedItem);
+            var arguments = new object[] { cboFinder.SelectedItem, cboNeighborhood.SelectedItem };
+
+            wrkFinder.RunWorkerAsync(arguments);
         }
 
         private void btnClearAll_Click(object sender, EventArgs e)

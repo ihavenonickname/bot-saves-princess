@@ -1,6 +1,6 @@
-﻿namespace BotSavesPrincess
+﻿namespace BotSavesPrincess_GUI
 {
-    partial class Form1
+    partial class frmBoard
     {
         /// <summary>
         /// Required designer variable.
@@ -33,16 +33,20 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radClean = new System.Windows.Forms.RadioButton();
             this.radWall = new System.Windows.Forms.RadioButton();
+            this.btnClearAll = new System.Windows.Forms.Button();
             this.radPrincess = new System.Windows.Forms.RadioButton();
             this.radHero = new System.Windows.Forms.RadioButton();
             this.btnFind = new System.Windows.Forms.Button();
             this.wrkFinder = new System.ComponentModel.BackgroundWorker();
-            this.btnClearAll = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.cboFinder = new System.Windows.Forms.ComboBox();
+            this.cboNeighborhood = new System.Windows.Forms.ComboBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.wrkPath = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBoard)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // dgvBoard
@@ -70,7 +74,7 @@
             this.dgvBoard.Name = "dgvBoard";
             this.dgvBoard.ReadOnly = true;
             this.dgvBoard.RowHeadersVisible = false;
-            this.dgvBoard.Size = new System.Drawing.Size(620, 394);
+            this.dgvBoard.Size = new System.Drawing.Size(732, 394);
             this.dgvBoard.TabIndex = 5;
             // 
             // groupBox1
@@ -78,11 +82,12 @@
             this.groupBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.groupBox1.Controls.Add(this.radClean);
             this.groupBox1.Controls.Add(this.radWall);
+            this.groupBox1.Controls.Add(this.btnClearAll);
             this.groupBox1.Controls.Add(this.radPrincess);
             this.groupBox1.Controls.Add(this.radHero);
-            this.groupBox1.Location = new System.Drawing.Point(47, 12);
+            this.groupBox1.Location = new System.Drawing.Point(17, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(243, 47);
+            this.groupBox1.Size = new System.Drawing.Size(327, 47);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Selection";
@@ -110,6 +115,17 @@
             this.radWall.Text = "Wall";
             this.radWall.UseVisualStyleBackColor = true;
             // 
+            // btnClearAll
+            // 
+            this.btnClearAll.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnClearAll.Location = new System.Drawing.Point(244, 16);
+            this.btnClearAll.Name = "btnClearAll";
+            this.btnClearAll.Size = new System.Drawing.Size(75, 23);
+            this.btnClearAll.TabIndex = 8;
+            this.btnClearAll.Text = "Clear all";
+            this.btnClearAll.UseVisualStyleBackColor = true;
+            this.btnClearAll.Click += new System.EventHandler(this.btnClearAll_Click);
+            // 
             // radPrincess
             // 
             this.radPrincess.AutoSize = true;
@@ -132,7 +148,8 @@
             // 
             // btnFind
             // 
-            this.btnFind.Location = new System.Drawing.Point(144, 16);
+            this.btnFind.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnFind.Location = new System.Drawing.Point(665, 29);
             this.btnFind.Name = "btnFind";
             this.btnFind.Size = new System.Drawing.Size(78, 23);
             this.btnFind.TabIndex = 7;
@@ -142,27 +159,16 @@
             // 
             // wrkFinder
             // 
+            this.wrkFinder.WorkerSupportsCancellation = true;
             this.wrkFinder.DoWork += new System.ComponentModel.DoWorkEventHandler(this.wrkFinder_DoWork);
-            // 
-            // btnClearAll
-            // 
-            this.btnClearAll.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnClearAll.Location = new System.Drawing.Point(530, 28);
-            this.btnClearAll.Name = "btnClearAll";
-            this.btnClearAll.Size = new System.Drawing.Size(75, 23);
-            this.btnClearAll.TabIndex = 8;
-            this.btnClearAll.Text = "Clear all";
-            this.btnClearAll.UseVisualStyleBackColor = true;
-            this.btnClearAll.Click += new System.EventHandler(this.btnClearAll_Click);
             // 
             // groupBox2
             // 
             this.groupBox2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.groupBox2.Controls.Add(this.cboFinder);
-            this.groupBox2.Controls.Add(this.btnFind);
-            this.groupBox2.Location = new System.Drawing.Point(296, 13);
+            this.groupBox2.Location = new System.Drawing.Point(350, 13);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(228, 46);
+            this.groupBox2.Size = new System.Drawing.Size(149, 46);
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Path";
@@ -176,13 +182,40 @@
             this.cboFinder.Size = new System.Drawing.Size(132, 21);
             this.cboFinder.TabIndex = 10;
             // 
+            // cboNeighborhood
+            // 
+            this.cboNeighborhood.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboNeighborhood.FormattingEnabled = true;
+            this.cboNeighborhood.Location = new System.Drawing.Point(6, 16);
+            this.cboNeighborhood.Name = "cboNeighborhood";
+            this.cboNeighborhood.Size = new System.Drawing.Size(138, 21);
+            this.cboNeighborhood.TabIndex = 10;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.groupBox3.Controls.Add(this.cboNeighborhood);
+            this.groupBox3.Location = new System.Drawing.Point(505, 13);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(154, 46);
+            this.groupBox3.TabIndex = 11;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Neighborhood generation";
+            // 
+            // wrkPath
+            // 
+            this.wrkPath.WorkerReportsProgress = true;
+            this.wrkPath.WorkerSupportsCancellation = true;
+            this.wrkPath.DoWork += new System.ComponentModel.DoWorkEventHandler(this.wrkPath_DoWork);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(650, 471);
+            this.ClientSize = new System.Drawing.Size(765, 471);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.btnFind);
             this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.btnClearAll);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.dgvBoard);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
@@ -190,10 +223,12 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Bot Saves Princess";
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvBoard)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -210,6 +245,9 @@
         private System.Windows.Forms.Button btnClearAll;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.ComboBox cboFinder;
+        private System.Windows.Forms.ComboBox cboNeighborhood;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.ComponentModel.BackgroundWorker wrkPath;
     }
 }
 

@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace BotSavesPrincess
+namespace BotSavesPrincess_Core
 {
-    class UDLRNeighborGenerator : INeighborGenerator
+    public class UDLRNeighborhood : INeighborhood
     {
         private readonly int _lastRow;
         private readonly int _lastColumn;
 
-        public UDLRNeighborGenerator(int lastRow, int lastColumn)
+        public UDLRNeighborhood(int lastRow, int lastColumn)
         {
             _lastRow = lastRow;
             _lastColumn = lastColumn;
         }
 
-        public IEnumerable<Position> Neighborhood(Position pos)
+        public IEnumerable<Position> Neighbors(Position pos)
         {
             if (pos.Row > 0)
             {
@@ -38,6 +34,11 @@ namespace BotSavesPrincess
             {
                 yield return new Position(pos.Row, pos.Column + 1);
             }
+        }
+
+        public override string ToString()
+        {
+            return "Up Down Left Right";
         }
     }
 }

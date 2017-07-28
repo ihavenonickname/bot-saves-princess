@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace BotSavesPrincess
+namespace BotSavesPrincess_Core
 {
-    class Position
+    public class Position
     {
         public int Row { get; set; }
 

@@ -2,29 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BotSavesPrincess
+namespace BotSavesPrincess_Core
 {
-    class SemiRandomPathFinder : IFinder
+    public class SemiRandomPathFinder : IPathFinder
     {
-        private readonly INeighborGenerator _neighborGenerator;
-
-        public SemiRandomPathFinder(INeighborGenerator neighborGenerator)
-        {
-            _neighborGenerator = neighborGenerator;
-        }
-
-        public IEnumerable<Position> FindPath(Position start, Position target)
-        {
-            return FindPath(start, target, new HashSet<Position>());
-        }
-
-        public IEnumerable<Position> FindPath(Position start, Position target, HashSet<Position> nonReachable)
+        public IEnumerable<Position> FindPath(Position start, Position target, HashSet<Position> nonReachable, INeighborhood neighborGenerator)
         {
             var random = new Random();
 
             var availablePositions = new List<Position>();
             var visitedPositions = new HashSet<Position>(nonReachable);
-            var history = new PathHistory();
+            var path = new Path();
 
             availablePositions.Add(start);
 
@@ -38,17 +26,17 @@ namespace BotSavesPrincess
 
                 if (current == target)
                 {
-                    return history.Build(start, target).Reverse();
+                    return path.Build(start, target);
                 }
 
                 visitedPositions.Add(current);
 
-                foreach (var neighbor in _neighborGenerator.Neighborhood(current))
+                foreach (var neighbor in neighborGenerator.Neighbors(current))
                 {
                     if (!visitedPositions.Contains(neighbor))
                     {
                         availablePositions.Add(neighbor);
-                        history.Update(neighbor, current);
+                        path.Update(neighbor, current);
                     }
                 }
             }

@@ -2,23 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BotSavesPrincess
+namespace BotSavesPrincess_Core
 {
-    class ShortestPathFinder : IFinder
+    public class ShortestPathFinder : IPathFinder
     {
-        private readonly INeighborGenerator _neighborGenerator;
-
-        public ShortestPathFinder(INeighborGenerator neighborGenerator)
-        {
-            _neighborGenerator = neighborGenerator;
-        }
-
-        public IEnumerable<Position> FindPath(Position start, Position target)
-        {
-            return FindPath(start, target, new HashSet<Position>());
-        }
-
-        public IEnumerable<Position> FindPath(Position start, Position target, HashSet<Position> nonReachable)
+        public IEnumerable<Position> FindPath(Position start, Position target, HashSet<Position> nonReachable, INeighborhood neighborGenerator)
         {
             var visitedPositions = new HashSet<Position>(nonReachable);
 
@@ -26,7 +14,7 @@ namespace BotSavesPrincess
 
             availablePositions.Add(start);
 
-            var history = new PathHistory();
+            var path = new Path();
 
             var actualScore = new Dictionary<Position, double>();
 
@@ -55,14 +43,14 @@ namespace BotSavesPrincess
 
                 if (current == target)
                 {
-                    return history.Build(start, target).Reverse();
+                    return path.Build(start, target);
                 }
 
                 availablePositions.Remove(current);
 
                 visitedPositions.Add(current);
 
-                foreach (var neighbor in _neighborGenerator.Neighborhood(current))
+                foreach (var neighbor in neighborGenerator.Neighbors(current))
                 {
                     if (visitedPositions.Contains(neighbor))
                     {
@@ -85,7 +73,7 @@ namespace BotSavesPrincess
 
                     if (attemptScore < actualScore[neighbor])
                     {
-                        history.Update(neighbor, current);
+                        path.Update(neighbor, current);
                         actualScore[neighbor] = attemptScore;
                         estimatedScore[neighbor] = actualScore[neighbor] + EstimateDistance(neighbor, target);
                     }

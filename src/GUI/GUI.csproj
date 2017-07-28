@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{44374118-48B2-41F8-8549-9F9751BBCE87}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>BotSavesPrincess</RootNamespace>
+    <RootNamespace>BotSavesPrincess_GUI</RootNamespace>
     <AssemblyName>BotSavesPrincess</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -64,6 +64,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

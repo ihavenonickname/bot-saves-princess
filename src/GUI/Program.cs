@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace BotSavesPrincess_GUI
+namespace GUI
 {
     static class Program
     {

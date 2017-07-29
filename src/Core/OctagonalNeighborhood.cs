@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BotSavesPrincess_Core
+namespace Core
 {
     public class OctagonalNeighborhood : INeighborhood
     {

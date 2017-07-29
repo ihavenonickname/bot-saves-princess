@@ -1,4 +1,4 @@
-﻿namespace BotSavesPrincess_GUI
+﻿namespace GUI
 {
     partial class frmBoard
     {
@@ -31,11 +31,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgvBoard = new System.Windows.Forms.DataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radClean = new System.Windows.Forms.RadioButton();
-            this.radWall = new System.Windows.Forms.RadioButton();
             this.btnClearAll = new System.Windows.Forms.Button();
-            this.radPrincess = new System.Windows.Forms.RadioButton();
-            this.radHero = new System.Windows.Forms.RadioButton();
             this.btnFind = new System.Windows.Forms.Button();
             this.wrkFinder = new System.ComponentModel.BackgroundWorker();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -43,6 +39,7 @@
             this.cboNeighborhood = new System.Windows.Forms.ComboBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.wrkPath = new System.ComponentModel.BackgroundWorker();
+            this.cboSelection = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvBoard)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -80,45 +77,18 @@
             // groupBox1
             // 
             this.groupBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.groupBox1.Controls.Add(this.radClean);
-            this.groupBox1.Controls.Add(this.radWall);
+            this.groupBox1.Controls.Add(this.cboSelection);
             this.groupBox1.Controls.Add(this.btnClearAll);
-            this.groupBox1.Controls.Add(this.radPrincess);
-            this.groupBox1.Controls.Add(this.radHero);
-            this.groupBox1.Location = new System.Drawing.Point(17, 12);
+            this.groupBox1.Location = new System.Drawing.Point(74, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(327, 47);
+            this.groupBox1.Size = new System.Drawing.Size(214, 47);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Selection";
             // 
-            // radClean
-            // 
-            this.radClean.AutoSize = true;
-            this.radClean.Location = new System.Drawing.Point(185, 19);
-            this.radClean.Name = "radClean";
-            this.radClean.Size = new System.Drawing.Size(52, 17);
-            this.radClean.TabIndex = 3;
-            this.radClean.TabStop = true;
-            this.radClean.Text = "Clean";
-            this.radClean.UseVisualStyleBackColor = true;
-            // 
-            // radWall
-            // 
-            this.radWall.AutoSize = true;
-            this.radWall.Checked = true;
-            this.radWall.Location = new System.Drawing.Point(133, 19);
-            this.radWall.Name = "radWall";
-            this.radWall.Size = new System.Drawing.Size(46, 17);
-            this.radWall.TabIndex = 2;
-            this.radWall.TabStop = true;
-            this.radWall.Text = "Wall";
-            this.radWall.UseVisualStyleBackColor = true;
-            // 
             // btnClearAll
             // 
-            this.btnClearAll.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnClearAll.Location = new System.Drawing.Point(244, 16);
+            this.btnClearAll.Location = new System.Drawing.Point(133, 15);
             this.btnClearAll.Name = "btnClearAll";
             this.btnClearAll.Size = new System.Drawing.Size(75, 23);
             this.btnClearAll.TabIndex = 8;
@@ -126,30 +96,10 @@
             this.btnClearAll.UseVisualStyleBackColor = true;
             this.btnClearAll.Click += new System.EventHandler(this.btnClearAll_Click);
             // 
-            // radPrincess
-            // 
-            this.radPrincess.AutoSize = true;
-            this.radPrincess.Location = new System.Drawing.Point(62, 19);
-            this.radPrincess.Name = "radPrincess";
-            this.radPrincess.Size = new System.Drawing.Size(65, 17);
-            this.radPrincess.TabIndex = 1;
-            this.radPrincess.Text = "Princess";
-            this.radPrincess.UseVisualStyleBackColor = true;
-            // 
-            // radHero
-            // 
-            this.radHero.AutoSize = true;
-            this.radHero.Location = new System.Drawing.Point(8, 19);
-            this.radHero.Name = "radHero";
-            this.radHero.Size = new System.Drawing.Size(48, 17);
-            this.radHero.TabIndex = 0;
-            this.radHero.Text = "Hero";
-            this.radHero.UseVisualStyleBackColor = true;
-            // 
             // btnFind
             // 
             this.btnFind.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnFind.Location = new System.Drawing.Point(665, 29);
+            this.btnFind.Location = new System.Drawing.Point(609, 29);
             this.btnFind.Name = "btnFind";
             this.btnFind.Size = new System.Drawing.Size(78, 23);
             this.btnFind.TabIndex = 7;
@@ -166,7 +116,7 @@
             // 
             this.groupBox2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.groupBox2.Controls.Add(this.cboFinder);
-            this.groupBox2.Location = new System.Drawing.Point(350, 13);
+            this.groupBox2.Location = new System.Drawing.Point(294, 13);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(149, 46);
             this.groupBox2.TabIndex = 9;
@@ -195,7 +145,7 @@
             // 
             this.groupBox3.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.groupBox3.Controls.Add(this.cboNeighborhood);
-            this.groupBox3.Location = new System.Drawing.Point(505, 13);
+            this.groupBox3.Location = new System.Drawing.Point(449, 13);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(154, 46);
             this.groupBox3.TabIndex = 11;
@@ -208,11 +158,20 @@
             this.wrkPath.WorkerSupportsCancellation = true;
             this.wrkPath.DoWork += new System.ComponentModel.DoWorkEventHandler(this.wrkPath_DoWork);
             // 
-            // Form1
+            // cboSelection
+            // 
+            this.cboSelection.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboSelection.FormattingEnabled = true;
+            this.cboSelection.Location = new System.Drawing.Point(6, 17);
+            this.cboSelection.Name = "cboSelection";
+            this.cboSelection.Size = new System.Drawing.Size(121, 21);
+            this.cboSelection.TabIndex = 12;
+            // 
+            // frmBoard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(765, 471);
+            this.ClientSize = new System.Drawing.Size(759, 471);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.btnFind);
             this.Controls.Add(this.groupBox2);
@@ -220,13 +179,12 @@
             this.Controls.Add(this.dgvBoard);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
-            this.Name = "Form1";
+            this.Name = "frmBoard";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Bot Saves Princess";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvBoard)).EndInit();
             this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -236,11 +194,7 @@
         #endregion
         private System.Windows.Forms.DataGridView dgvBoard;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.RadioButton radWall;
-        private System.Windows.Forms.RadioButton radPrincess;
-        private System.Windows.Forms.RadioButton radHero;
         private System.Windows.Forms.Button btnFind;
-        private System.Windows.Forms.RadioButton radClean;
         private System.ComponentModel.BackgroundWorker wrkFinder;
         private System.Windows.Forms.Button btnClearAll;
         private System.Windows.Forms.GroupBox groupBox2;
@@ -248,6 +202,7 @@
         private System.Windows.Forms.ComboBox cboNeighborhood;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.ComponentModel.BackgroundWorker wrkPath;
+        private System.Windows.Forms.ComboBox cboSelection;
     }
 }
 

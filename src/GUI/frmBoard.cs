@@ -1,4 +1,4 @@
-﻿using BotSavesPrincess_Core;
+﻿using Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,10 +6,28 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace BotSavesPrincess_GUI
+namespace GUI
 {
     public partial class frmBoard : Form
     {
+        private enum CellSelection
+        {
+            [Description("Hero")]
+            Hero,
+
+            [Description("Princess")]
+            Princess,
+
+            [Description("Wall")]
+            Wall,
+
+            [Description("Path")]
+            Path,
+
+            [Description("Clean")]
+            Clean
+        }
+
         private const int CELL_SIZE = 20;
         private const int ROWS_COUNT = 30;
         private const int COLS_COUNT = 70;
@@ -71,6 +89,13 @@ namespace BotSavesPrincess_GUI
             cboFinder.Items.Add(new RandomPathFinder());
 
             cboFinder.SelectedIndex = 0;
+
+            cboSelection.Items.Add(CellSelection.Hero);
+            cboSelection.Items.Add(CellSelection.Princess);
+            cboSelection.Items.Add(CellSelection.Wall);
+            cboSelection.Items.Add(CellSelection.Clean);
+
+            cboSelection.SelectedIndex = 0;
 
             dgvBoard.CellClick += dgvBoard_CellClick;
 
@@ -147,7 +172,7 @@ namespace BotSavesPrincess_GUI
             {
                 var pos = e.UserState as Position;
 
-                changeColor(pos.Row, pos.Column, pathColor);
+                UpdateCell(pos.Row, pos.Column, CellSelection.Path);
             }
             catch (Exception)
             {
@@ -157,63 +182,24 @@ namespace BotSavesPrincess_GUI
 
         private void dgvBoard_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
         {
-            if (ModifierKeys.HasFlag(Keys.Control))
+            if (!ModifierKeys.HasFlag(Keys.Control))
             {
-                if (radWall.Checked)
-                {
-                    changeColor(e.RowIndex, e.ColumnIndex, wallColor);
-                }
-                else if (radClean.Checked)
-                {
-                    changeColor(e.RowIndex, e.ColumnIndex, cleanColor);
-                }
+                return;
+            }
+
+            var selected = (CellSelection)cboSelection.SelectedItem;
+
+            if (selected == CellSelection.Wall || selected == CellSelection.Clean)
+            {
+                UpdateCell(e.RowIndex, e.ColumnIndex, selected);
             }
         }
 
         private void dgvBoard_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            var pos = new Position(e.RowIndex, e.ColumnIndex);
+            var selected = (CellSelection)cboSelection.SelectedItem;
 
-            if (radWall.Checked)
-            {
-                changeColor(pos.Row, pos.Column, wallColor);
-            }
-            else if (radClean.Checked)
-            {
-                changeColor(pos.Row, pos.Column, cleanColor);
-            }
-            else if (radHero.Checked)
-            {
-                if (pos == _heroPosition)
-                {
-                    return;
-                }
-
-                changeColor(pos.Row, pos.Column, heroColor);
-
-                if (_heroPosition != null)
-                {
-                    changeColor(_heroPosition.Row, _heroPosition.Column, cleanColor);
-                }
-
-                _heroPosition = pos;
-            }
-            else
-            {
-                if (pos == _princessPosition)
-                {
-                    return;
-                }
-
-                changeColor(pos.Row, pos.Column, princessColor);
-
-                if (_princessPosition != null)
-                {
-                    changeColor(_princessPosition.Row, _princessPosition.Column, cleanColor);
-                }
-
-                _princessPosition = pos;
-            }
+            UpdateCell(e.RowIndex, e.ColumnIndex, selected);
         }
         
         private void btnFind_Click(object sender, EventArgs e)
@@ -238,7 +224,7 @@ namespace BotSavesPrincess_GUI
                 {
                     if (dgvBoard.Rows[row].Cells[column].Style.BackColor == pathColor)
                     {
-                        changeColor(row, column, cleanColor);
+                        UpdateCell(row, column, CellSelection.Clean);
                     }
                 }
             }
@@ -254,7 +240,7 @@ namespace BotSavesPrincess_GUI
             {
                 for (var column = 0; column < COLS_COUNT; column++)
                 {
-                    changeColor(row, column, cleanColor);
+                    UpdateCell(row, column, CellSelection.Clean);
                 }
             }
 
@@ -262,7 +248,101 @@ namespace BotSavesPrincess_GUI
             _princessPosition = null;
         }
 
-        private void changeColor(int row, int col, Color color)
+        private void UpdateCell(int row, int column, CellSelection selection)
+        {
+            var pos = new Position(row, column);
+
+            switch (selection)
+            {
+                case CellSelection.Hero:
+                    if (pos == _heroPosition)
+                    {
+                        return;
+                    }
+
+                    if (pos == _princessPosition)
+                    {
+                        _princessPosition = null;
+                    }
+
+                    ChangeColor(pos.Row, pos.Column, heroColor);
+
+                    if (_heroPosition != null)
+                    {
+                        ChangeColor(_heroPosition.Row, _heroPosition.Column, cleanColor);
+                    }
+
+                    _heroPosition = pos;
+
+                    break;
+
+                case CellSelection.Princess:
+                    if (pos == _princessPosition)
+                    {
+                        return;
+                    }
+
+                    if (pos == _heroPosition)
+                    {
+                        _heroPosition = null;
+                    }
+
+                    ChangeColor(pos.Row, pos.Column, princessColor);
+
+                    if (_princessPosition != null)
+                    {
+                        ChangeColor(_princessPosition.Row, _princessPosition.Column, cleanColor);
+                    }
+
+                    _princessPosition = pos;
+
+                    break;
+
+                case CellSelection.Wall:
+                    if (pos == _heroPosition)
+                    {
+                        _heroPosition = null;
+                    }
+                    else if (pos == _princessPosition)
+                    {
+                        _princessPosition = null;
+                    }
+
+                    ChangeColor(pos.Row, pos.Column, wallColor);
+
+                    break;
+
+                case CellSelection.Clean:
+                    if (pos == _heroPosition)
+                    {
+                        _heroPosition = null;
+                    }
+                    else if (pos == _princessPosition)
+                    {
+                        _princessPosition = null;
+                    }
+
+                    ChangeColor(pos.Row, pos.Column, cleanColor);
+
+                    break;
+
+                case CellSelection.Path:
+                    if (pos == _heroPosition)
+                    {
+                        _heroPosition = null;
+                    }
+                    else if (pos == _princessPosition)
+                    {
+                        _princessPosition = null;
+                    }
+
+                    ChangeColor(pos.Row, pos.Column, pathColor);
+
+                    break;
+            }
+        }
+
+        private void ChangeColor(int row, int col, Color color)
         {
             dgvBoard.Rows[row].Cells[col].Style.BackColor = color;
             dgvBoard.Rows[row].Cells[col].Style.SelectionBackColor = color;

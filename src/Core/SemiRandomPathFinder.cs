@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BotSavesPrincess_Core
+namespace Core
 {
     public class SemiRandomPathFinder : IPathFinder
     {

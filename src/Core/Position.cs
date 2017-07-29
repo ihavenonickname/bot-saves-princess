@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BotSavesPrincess_Core
+namespace Core
 {
     public class Position
     {
